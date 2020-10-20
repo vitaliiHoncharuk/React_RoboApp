@@ -4,34 +4,39 @@ import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import ErrorBoundry from '../components/ErrorBoundry';
 import './App.css'
+import connect from 'react-redux/es/connect/connect';
+import {setSearchField, requestRobots} from '../store/app/app.action';
+
+
+const mapStateToProps = (state) => ({
+  searchField: state.setSearchFieldReducer.searchField,
+  robots: state.requestRobotsReducer.robots,
+  isPending: state.requestRobotsReducer.isPending,
+  error: state.requestRobotsReducer.error,
+});
+
+
+const mapDispatchToProps = (dispatch) => ({
+  onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+  getRobots: () => dispatch(requestRobots()),
+});
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-     robots: [],
-     searchField: ''
-   }
-  }
-
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
-        .then((users) => this.setState({robots: users}));
+    this.props.getRobots();
   }
-
-  onSearchChange = (event) => {
-    this.setState({searchField: event.target.value});
-  };
 
   render() {
-    const filteredRobots = this.state.robots.filter(robot =>
-        robot.name.match(new RegExp(this.state.searchField,'i'))
+    const {searchField, onSearchChange, robots} = this.props;
+
+    const filteredRobots = robots.filter(robot =>
+        robot.name.match(new RegExp(searchField,'i'))
     );
+
     return (
         <div className="tc">
           <h1 className="f2">RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange}/>
+          <SearchBox searchChange={onSearchChange}/>
           <Scroll>
             <ErrorBoundry>
               <CardList robots={filteredRobots} />
@@ -42,4 +47,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App);
