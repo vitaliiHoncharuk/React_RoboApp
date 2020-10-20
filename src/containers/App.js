@@ -1,37 +1,42 @@
 import React from 'react';
 import CardList from '../components/CardList';
+import {connect} from 'react-redux';
+import {setSearchFieldAction} from '../store/actions/setSearchFieldAction.js';
 import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import ErrorBoundry from '../components/ErrorBoundry';
 import './App.css'
+import {requestRobots} from '../store/actions/requestRobotsAction';
+
+
+const mapStateToProps = state => ({
+  searchField: state.searchRobots.searchField,
+  robots: state.requestRobots.robots,
+  pending: state.requestRobots.pending,
+  error: state.requestRobots.error,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onSearchChange: (event) => dispatch(setSearchFieldAction(event.target.value)),
+  onRequestRobots: () => dispatch(requestRobots())
+});
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-     robots: [],
-     searchField: ''
-   }
-  }
-
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
-        .then((users) => this.setState({robots: users}));
+    this.props.onRequestRobots();
   }
-
-  onSearchChange = (event) => {
-    this.setState({searchField: event.target.value});
-  };
 
   render() {
-    const filteredRobots = this.state.robots.filter(robot =>
-        robot.name.match(new RegExp(this.state.searchField,'i'))
+    const {searchField, onSearchChange, robots, isPending} = this.props;
+    const filteredRobots = robots.filter(robot =>
+        robot.name.match(new RegExp(searchField,'i'))
     );
-    return (
+    return isPending ?
+        <h1>Loading...</h1> :
+        (
         <div className="tc">
           <h1 className="f2">RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange}/>
+          <SearchBox searchChange={onSearchChange}/>
           <Scroll>
             <ErrorBoundry>
               <CardList robots={filteredRobots} />
@@ -42,4 +47,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default connect(mapStateToProps,mapDispatchToProps)(App);
