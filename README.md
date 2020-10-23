@@ -5,4 +5,7 @@
 
 ####[Branch of same app , using hooks](https://github.com/vitaliiHoncharuk/React_RoboApp/tree/using_hooks)
 
-#### [Branch making it PWA  +  optimizations](https://github.com/vitaliiHoncharuk/React_RoboApp/tree/optimizations) + [Lighthouse report](./public/lighthouse_report.png)
+#### [Branch making it PWA  +  optimizations](https://github.com/vitaliiHoncharuk/React_RoboApp/tree/optimizations)
+
+[Lighthouse report before optimizations](./public/lighthouse_before.png)  
+[Lighthouse report after](./public/lighthouse_report.png)
