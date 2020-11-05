@@ -7,5 +7,7 @@
 
 #### [Branch making it PWA  +  optimizations](https://github.com/vitaliiHoncharuk/React_RoboApp/tree/optimizations)
 
+
+#### Performance improvements. 
 [Lighthouse report before optimizations](./public/lighthouse_before.png)  
 [Lighthouse report after](./public/lighthouse_report.png)
