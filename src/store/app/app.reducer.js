@@ -13,7 +13,7 @@ const initialState = {
 export const setSearchFieldReducer = (state = initialState, action) => {
   switch (action.type) {
 	case SET_SEARCH_FIELD:
-	  return {...state, ...action.payload };
+	  return {...state, searchField: action.payload };
 	default:
 	  return {...state};
   }
